@@ -131,21 +131,14 @@ function numFormat(num?: number) {
 }
 function RecipeCard(props: { recipeItem: RecipeItem }) {
   const { recipeItem } = props;
-
-  const videoData = recipeItem.videoData;
-  const owner = videoData?.owner;
-
-  const videoPic = videoData?.pic || "";
-  const ownerFace = owner?.face || "";
-  const videoStat = videoData?.stat;
   return (
     <div className="card-side bg-base-100 shadow-xl rounded-lg max-w-full justify-center m-2">
       <div className="relative">
         <figure className="flex items-center justify-center overflow-clip rounded-lg">
-          <ImgShow pic={videoPic} className="" />
+          <ImgShow pic={recipeItem.pic} className="" />
         </figure>
         <span className="absolute top-2 right-2">
-          <AvatarShow pic={ownerFace} />
+          <AvatarShow pic={recipeItem.face} />
         </span>
         <span className=" text-red-400 text-lg bg-base-100/40 p-1 rounded-md  absolute top-2 left-2">
           <DifficultyShow difficulty={props.recipeItem.difficulty} />
@@ -183,7 +176,7 @@ function RecipeCard(props: { recipeItem: RecipeItem }) {
                   fill="currentColor"
                 ></path>
               </svg>
-              {numFormat(videoStat?.like)}
+              {numFormat(recipeItem.stat?.like)}
             </span>
             <span className=" flex flex-col items-center ">
               <svg
@@ -201,7 +194,7 @@ function RecipeCard(props: { recipeItem: RecipeItem }) {
                   fill="currentColor"
                 ></path>
               </svg>
-              {numFormat(videoStat?.coin)}
+              {numFormat(recipeItem.stat?.coin)}
             </span>
             <span className=" flex flex-col items-center ">
               <svg
@@ -219,7 +212,7 @@ function RecipeCard(props: { recipeItem: RecipeItem }) {
                   fill="currentColor"
                 ></path>
               </svg>
-              {numFormat(videoStat?.favorite)}
+              {numFormat(recipeItem.stat?.favorite)}
             </span>
           </div>
         </div>

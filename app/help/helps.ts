@@ -1,7 +1,7 @@
 import type { RecipeItem } from "./db";
 import { db } from "./db";
-import recipe from "~/data/recipe.json";
-import stuff from "~/data/stuff.json";
+import recipe from "../../public/data/recipe.json";
+import stuff from "../../public/data/stuff.json";
 
 export async function dbInit() {
   const dbInit = localStorage.getItem("dbInit");

@@ -1,6 +1,5 @@
 import type { Table } from "dexie";
 import Dexie from "dexie";
-import type { VideoDataItem } from "./typeHelps";
 
 export type Difficulty = "简单" | "普通" | "困难";
 
@@ -42,9 +41,22 @@ export interface RecipeItem {
    */
   tools: string[];
   /**
-   * 视频信息
+   * 视频封面
    */
-  videoData?: VideoDataItem;
+  pic?: string;
+  /**视频标题 */
+  title?: string;
+  /**作者头像 */
+  face?: string;
+  /**视频数据 */
+  stat?: {
+    /**投币数 */
+    coin?: number;
+    /**收藏数 */
+    favorite?: number;
+    /**点赞数 */
+    like?: number;
+  };
 }
 export interface StuffItem {
   name: string;
@@ -59,7 +71,7 @@ export class recipeClassedDexie extends Dexie {
     super("recipeDatabase");
     this.version(1).stores({
       Recipes:
-        "++,name,link,bv,*stuff,emojis,difficulty,*tags,*methods,videoData", // Primary key and indexed props
+        "++,name,link,bv,*stuff,emojis,difficulty,*tags,*methods,pic,title,face,stat", // Primary key and indexed props
       Stuff: "++,name,type,icon",
     });
   }

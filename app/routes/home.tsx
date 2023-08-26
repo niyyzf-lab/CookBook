@@ -113,7 +113,7 @@ const Home = () => {
         columnClassName=" space-y-2"
       >
         {visibleResults
-          .filter((item) => item.videoData !== null)
+          .filter((item) => item !== null)
           .map((item) => (
             <div key={item.name} className=" flex flex-col items-center">
               <RecipeCard recipeItem={item} />

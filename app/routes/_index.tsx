@@ -9,7 +9,7 @@ export default function Index() {
     if (!dbInit) {
       setTimeout(() => {
         navigate("/home", { replace: true });
-      }, 5000);
+      }, 50);
     } else {
       navigate("/home", { replace: true });
     }
