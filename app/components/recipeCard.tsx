@@ -13,7 +13,7 @@ function ImgShow(props: { pic?: string; className?: string }) {
   useEffect(() => {
     if (inView) {
       const img = new Image();
-      img.src = `https://images.weserv.nl/?url=${props.pic}`;
+      img.src = `https://images.weserv.nl/?url=${props.pic}@1w_1h_1q.webp`;
 
       img.onload = () => {
         setIsLoaded(true);
@@ -26,21 +26,23 @@ function ImgShow(props: { pic?: string; className?: string }) {
   }, [inView, props.pic]);
 
   return (
-    <div className="img-container min-h-[150px] min-w-[250px] flex  items-center">
+    <>
       <img
-        className={props.className}
+        className=" w-full h-full"
         src={
-          isLoaded && inView ? `https://images.weserv.nl/?url=${props.pic}` : ""
+          isLoaded && inView
+            ? `https://images.weserv.nl/?url=${props.pic}@600w_30q.webp`
+            : undefined
         }
         alt=""
         ref={ref}
       />
       {!isLoaded && (
-        <span className="flex flex-col items-center w-full">
-          <progress className="progress w-32 px-2"></progress>
+        <span className=" h-full w-full flex  items-center absolute  pl-[10px] ">
+          <progress className="progress w-[calc(100%-20px)]"></progress>
         </span>
       )}
-    </div>
+    </>
   );
 }
 
@@ -62,10 +64,10 @@ function AvatarShow(props: { pic?: string; className?: string }) {
     <div>
       {isLoaded ? (
         <div className="avatar">
-          <div className="w-12 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
+          <div className="w-12 rounded-full ring ring-primary ring-offset-base-100  ring-offset-2">
             {ownerFace ? (
               <img
-                src={`https://images.weserv.nl/?url=${ownerFace}`}
+                src={`https://images.weserv.nl/?url=${ownerFace}@100w_100h.webp`}
                 alt=""
                 onLoad={handleLoad}
                 onError={handleError}
@@ -142,21 +144,19 @@ function numFormat(num?: number) {
 function RecipeCard(props: { recipeItem: RecipeItem }) {
   const { recipeItem } = props;
   return (
-    <div className="card-side bg-base-100 shadow-xl rounded-lg max-w-full justify-center m-2">
-      <div className="relative">
-        <figure className="flex items-center justify-center overflow-clip rounded-lg">
-          <ImgShow pic={recipeItem.pic} className="" />
-        </figure>
-        <span className="absolute top-2 right-2">
-          <AvatarShow pic={recipeItem.face} />
-        </span>
-        <span className=" text-red-400 text-lg bg-base-100/40 p-1 rounded-md  absolute top-2 left-2">
-          <DifficultyShow difficulty={props.recipeItem.difficulty} />
-        </span>
-      </div>
+    <div className="card  bg-base-100 shadow-xl rounded-lg w-[calc(100%-10px)]">
+      <figure className=" rounded-lg h-max min-h-[200px] relative">
+        <ImgShow pic={recipeItem.pic} />
+      </figure>
+      <span className="absolute top-2 right-2">
+        <AvatarShow pic={recipeItem.face} />
+      </span>
+      <span className=" text-red-400 text-lg bg-base-100/40 p-1 rounded-md  absolute top-2 left-2">
+        <DifficultyShow difficulty={props.recipeItem.difficulty} />
+      </span>
 
-      <div className="p-2">
-        <h2 className="text-lg font-bold">{recipeItem.name}</h2>
+      <div className="card-body justify-star justify-items-start">
+        <h2 className=" card-title">{recipeItem.name}</h2>
         <div className="flex flex-col">
           <div className="flex">
             <p>食材：</p>
