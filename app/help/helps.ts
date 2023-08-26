@@ -1,4 +1,4 @@
-import type { RecipeItem } from "./db";
+import type { RecipeItem } from "./typeHelps";
 import { db } from "./db";
 import recipe from "../../public/data/recipe.json";
 import stuff from "../../public/data/stuff.json";

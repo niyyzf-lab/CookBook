@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { ToggleButtonGroup } from "../components/toggleButton";
 import RecipeCard from "~/components/recipeCard";
 import { dbInit } from "~/help/helps";
 import { db } from "~/help/db";
-import type { ToggleItem } from "~/help/typeHelps";
-import type { RecipeItem } from "~/help/db";
+import type { ToggleItem, RecipeItem } from "~/help/typeHelps";
 import Masonry from "react-masonry-css";
+import { ToggleButtonGroup } from "~/components/toggleButton";
 
 const initialState = {
   vegetableList: [],
@@ -13,7 +12,7 @@ const initialState = {
   stapleList: [],
 };
 
-const BATCH_SIZE = 10; // 每批渲染的卡片数量
+const BATCH_SIZE = 10;
 
 const Home = () => {
   const [selectStuffList, setSelectStuffList] = useState<ToggleItem[]>([]);
@@ -21,28 +20,27 @@ const Home = () => {
     string | null
   >(null);
   const [result, setResult] = useState<RecipeItem[]>([]);
-  const [toggleLists, setToggleLists] = useState(initialState);
   const [batchIndex, setBatchIndex] = useState(0);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     setSelectStuffList([
-      ...toggleLists.vegetableList,
-      ...toggleLists.meatList,
-      ...toggleLists.stapleList,
+      ...initialState.vegetableList,
+      ...initialState.meatList,
+      ...initialState.stapleList,
     ]);
-  }, [toggleLists]);
+  }, []);
 
   useEffect(() => {
     const updateRecipes = async () => {
+      setIsModalOpen(true);
       const filteredRecipes = await db.Recipes.filter(
-        (recipe: { stuff: string | string[] }) => {
-          return selectStuffList.some((stuff) =>
-            recipe.stuff.includes(stuff.label)
-          );
-        }
+        (recipe: { stuff: string | string[] }) =>
+          selectStuffList.some((stuff) => recipe.stuff.includes(stuff.label))
       ).toArray();
 
       setResult(filteredRecipes);
+      setIsModalOpen(false);
     };
 
     updateRecipes();
@@ -55,6 +53,7 @@ const Home = () => {
   }, []);
 
   const handleDatabaseInit = async () => {
+    setIsModalOpen(true);
     await dbInit();
     window.location.reload();
   };
@@ -63,7 +62,7 @@ const Home = () => {
     if (batchIndex * BATCH_SIZE < result.length) {
       const timer = setTimeout(() => {
         setBatchIndex((prevIndex) => prevIndex + 1);
-      }, 100); // 添加一个延迟以平滑渲染
+      }, 100);
       return () => clearTimeout(timer);
     }
   }, [batchIndex, result]);
@@ -71,19 +70,19 @@ const Home = () => {
   const visibleResults = result.slice(0, batchIndex * BATCH_SIZE + BATCH_SIZE);
 
   const breakpointColumnsObj = {
-    default: 6,
-    1600: 4,
+    default: 4,
+    1600: 3,
     1100: 2,
     700: 1,
   };
 
   return (
     <div className="flex flex-col space-y-2 overflow-y-auto h-full">
-      {initializationStatus === null || initializationStatus === "false" ? (
+      {(!initializationStatus || initializationStatus === "false") && (
         <button className="btn" onClick={handleDatabaseInit}>
           初始化
         </button>
-      ) : null}
+      )}
       {Object.keys(initialState).map((type) => (
         <ToggleButtonGroup
           key={type}
@@ -101,24 +100,26 @@ const Home = () => {
               ? "red"
               : "yellow"
           }
-          onSelect={(items) =>
-            setToggleLists((prevState) => ({ ...prevState, [type]: items }))
-          }
+          onSelect={setSelectStuffList}
         />
       ))}
 
+      {isModalOpen && (
+        <div className="modal">
+          <p>处理中，请稍候...</p>
+        </div>
+      )}
+
       <Masonry
         breakpointCols={breakpointColumnsObj}
-        className="flex w-full  justify-between"
-        columnClassName=" space-y-2"
+        className="flex w-full justify-between"
+        columnClassName="space-y-2"
       >
-        {visibleResults
-          .filter((item) => item !== null)
-          .map((item) => (
-            <div key={item.name} className=" flex flex-col items-center">
-              <RecipeCard recipeItem={item} />
-            </div>
-          ))}
+        {visibleResults.map((item) => (
+          <div key={item.name} className="flex flex-col items-center">
+            <RecipeCard recipeItem={item} />
+          </div>
+        ))}
       </Masonry>
     </div>
   );
