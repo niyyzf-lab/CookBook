@@ -66,7 +66,7 @@ function RecipeCard({ recipeItem }: RecipeCardProps) {
     >
       {flipped && (
         <animated.div
-          className="bg-base-100 shadow-xl h-[600px] w-[calc(100vw-50px)] card lg:card-side"
+          className="bg-base-100 shadow-xl w-[calc(100vw-50px)] lg:w-fit card lg:card-side lg:h-[300px] border border-base-300"
           style={{
             opacity,
             transform,
@@ -75,8 +75,8 @@ function RecipeCard({ recipeItem }: RecipeCardProps) {
         >
           <figure>
             <Lazyimg
-              className="lazy h-[600px] "
-              src={`${imageURL}${pic}@600h_20q.webp`}
+              className="lazy lg:h-[300px] w-full"
+              src={`${imageURL}${pic}@300h_20q.webp`}
             />
           </figure>
           <div>
