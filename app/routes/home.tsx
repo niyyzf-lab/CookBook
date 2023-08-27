@@ -3,9 +3,7 @@ import RecipeCard from "~/components/recipeCard";
 import { dbInit } from "~/help/helps";
 import { db } from "~/help/db";
 import type { ToggleItem, RecipeItem } from "~/help/typeHelps";
-import Masonry from "react-masonry-css";
 import { ToggleButtonGroup } from "~/components/toggleButton";
-
 const initialState = {
   vegetableList: [],
   meatList: [],
@@ -69,13 +67,6 @@ const Home = () => {
 
   const visibleResults = result.slice(0, batchIndex * BATCH_SIZE + BATCH_SIZE);
 
-  const breakpointColumnsObj = {
-    default: 4,
-    1600: 3,
-    1100: 2,
-    700: 1,
-  };
-
   return (
     <div className="flex flex-col space-y-2 overflow-y-auto h-full">
       {(!initializationStatus || initializationStatus === "false") && (
@@ -110,17 +101,11 @@ const Home = () => {
         </div>
       )}
 
-      <Masonry
-        breakpointCols={breakpointColumnsObj}
-        className="flex w-full justify-between"
-        columnClassName="space-y-2"
-      >
+      <div className=" flex flex-wrap pb-10  justify-center gap-6 px-4">
         {visibleResults.map((item) => (
-          <div key={item.name} className="flex flex-col items-center">
-            <RecipeCard recipeItem={item} />
-          </div>
+          <RecipeCard recipeItem={item} key={item.name} />
         ))}
-      </Masonry>
+      </div>
     </div>
   );
 };
