@@ -10,7 +10,7 @@ const initialState = {
   stapleList: [],
 };
 
-const BATCH_SIZE = 10;
+const BATCH_SIZE = 2;
 
 const Home = () => {
   const [selectStuffList, setSelectStuffList] = useState<{
