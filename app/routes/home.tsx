@@ -13,7 +13,15 @@ const initialState = {
 const BATCH_SIZE = 10;
 
 const Home = () => {
-  const [selectStuffList, setSelectStuffList] = useState<ToggleItem[]>([]);
+  const [selectStuffList, setSelectStuffList] = useState<{
+    vegetableList: ToggleItem[];
+    meatList: ToggleItem[];
+    stapleList: ToggleItem[];
+  }>({
+    vegetableList: [],
+    meatList: [],
+    stapleList: [],
+  });
   const [initializationStatus, setInitializationStatus] = useState<
     string | null
   >(null);
@@ -22,19 +30,11 @@ const Home = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
-    setSelectStuffList([
-      ...initialState.vegetableList,
-      ...initialState.meatList,
-      ...initialState.stapleList,
-    ]);
-  }, []);
-
-  useEffect(() => {
     const updateRecipes = async () => {
       setIsModalOpen(true);
-      const filteredRecipes = await db.Recipes.filter(
-        (recipe: { stuff: string | string[] }) =>
-          selectStuffList.some((stuff) => recipe.stuff.includes(stuff.label))
+      const selectedItems = Object.values(selectStuffList).flat();
+      const filteredRecipes = await db.Recipes.filter((recipe) =>
+        selectedItems.some((stuff) => recipe.stuff.includes(stuff.label))
       ).toArray();
 
       setResult(filteredRecipes);
@@ -91,7 +91,12 @@ const Home = () => {
               ? "red"
               : "yellow"
           }
-          onSelect={setSelectStuffList}
+          onSelect={(selectedItems) =>
+            setSelectStuffList((prev) => ({
+              ...prev,
+              [type]: selectedItems,
+            }))
+          }
         />
       ))}
 
@@ -101,9 +106,9 @@ const Home = () => {
         </div>
       )}
 
-      <div className=" flex flex-wrap pb-10  justify-center gap-2  px-4">
-        {visibleResults.map((item) => (
-          <RecipeCard recipeItem={item} key={item.name} />
+      <div className="flex flex-wrap pb-10 justify-center gap-2 px-4">
+        {visibleResults.map((item, Index) => (
+          <RecipeCard recipeItem={item} key={Index} />
         ))}
       </div>
     </div>

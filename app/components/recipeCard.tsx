@@ -46,6 +46,25 @@ function numFormat(num?: number): string | number {
   }
 }
 
+const EmojisShow = ({ emojis }: { emojis?: string[] }) => {
+  if (!emojis) {
+    return null;
+  } else if (emojis.length >= 5) {
+    return <Icon icon="fluent-emoji:pot-of-food" className="text-2xl" />;
+  }
+  return (
+    <div className="flex">
+      {emojis
+        ?.filter((item) => item !== null)
+        .map((item, index) => (
+          <span key={index} className="text-2xl">
+            <Icon icon={item} />
+          </span>
+        ))}
+    </div>
+  );
+};
+
 interface RecipeCardProps {
   recipeItem: RecipeItem;
 }
@@ -59,10 +78,14 @@ function RecipeCard({ recipeItem }: RecipeCardProps) {
     transform: `perspective(600px) rotateX(${flipped ? 180 : 0}deg)`,
     config: { mass: 5, tension: 1000, friction: 80 },
   });
+  const colseCard = (e: { stopPropagation: () => void }) => {
+    e.stopPropagation();
+    setFlipped(false);
+  };
   return (
     <div
-      onClick={() => setFlipped((state) => !state)}
-      className="flex items-center"
+      onClick={() => setFlipped(true)}
+      className="flex items-center w-fit max-w-full"
     >
       {flipped && (
         <animated.div
@@ -95,16 +118,23 @@ function RecipeCard({ recipeItem }: RecipeCardProps) {
                 </div>
               </div>
             </div>
+            <button
+              className="btn btn-ghost btn-sm rounded-btn bg-red-300/20 "
+              onClick={colseCard}
+            >
+              关闭
+            </button>
           </div>
         </animated.div>
       )}
       {!flipped && (
         <animated.div
-          className=" bg-base-100 shadow-xl rounded-lg px-3 py-1  border border-base-300 items-center "
+          className=" bg-base-100 shadow-xl rounded-lg px-3 py-1  border border-base-300 items-center  max-w-full "
           style={{ opacity: opacity.to((o) => 1 - o), transform }}
         >
-          <div className=" flex  items-center justify-items-stretch w-full justify-between gap-x-2">
-            <h2 className="text-xl font-semibold">{name}</h2>
+          <div className=" flex items-center justify-items-stretch w-full justify-between gap-x-2">
+            <EmojisShow emojis={emojis} />
+            <h2 className="text-xl font-semibold truncate ">{name}</h2>
             <span className="flex items-center gap-x-1">
               <HeartIcon num={stat?.like} />
               {numFormat(stat?.like)}
