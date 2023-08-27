@@ -101,7 +101,7 @@ const Home = () => {
         </div>
       )}
 
-      <div className=" flex flex-wrap pb-10  justify-center gap-6 px-4">
+      <div className=" flex flex-wrap pb-10  justify-center gap-2  px-4">
         {visibleResults.map((item) => (
           <RecipeCard recipeItem={item} key={item.name} />
         ))}

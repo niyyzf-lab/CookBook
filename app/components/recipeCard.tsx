@@ -81,12 +81,26 @@ function RecipeCard({ recipeItem }: RecipeCardProps) {
           </figure>
           <div>
             <h2 className="text-xl font-semibold">{name}</h2>
+            <div className="flex flex-col">
+              <div className="flex">
+                <p>食材：</p>
+                <div className="flex flex-wrap">
+                  {emojis
+                    ?.filter((item) => item !== null)
+                    .map((item, index) => (
+                      <span key={index} className="text-2xl">
+                        <Icon icon={item} />
+                      </span>
+                    ))}
+                </div>
+              </div>
+            </div>
           </div>
         </animated.div>
       )}
       {!flipped && (
         <animated.div
-          className=" bg-base-100 shadow-xl rounded-lg p-4  border border-base-300 items-center "
+          className=" bg-base-100 shadow-xl rounded-lg px-3 py-1  border border-base-300 items-center "
           style={{ opacity: opacity.to((o) => 1 - o), transform }}
         >
           <div className=" flex  items-center justify-items-stretch w-full justify-between gap-x-2">
@@ -95,21 +109,6 @@ function RecipeCard({ recipeItem }: RecipeCardProps) {
               <HeartIcon num={stat?.like} />
               {numFormat(stat?.like)}
             </span>
-          </div>
-
-          <div className="flex flex-col">
-            <div className="flex">
-              <p>食材：</p>
-              <div className="flex flex-wrap">
-                {emojis
-                  ?.filter((item) => item !== null)
-                  .map((item, index) => (
-                    <span key={index} className="text-2xl">
-                      <Icon icon={item} />
-                    </span>
-                  ))}
-              </div>
-            </div>
           </div>
         </animated.div>
       )}
