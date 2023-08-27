@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useState } from "react";
 import type { RecipeItem } from "~/help/typeHelps";
 import { Icon } from "@iconify/react";
 import Lazyimg from "react-lazyimg-component";
